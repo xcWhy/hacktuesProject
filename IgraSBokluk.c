@@ -81,7 +81,7 @@ int Choveche(int y, int x, char a[50][200])
 
 }
 
-int Move(int x, int y, int a[50][200])
+int Move(int x, int y, char a[50][200])
 {
     int k=0;
     x=25;
