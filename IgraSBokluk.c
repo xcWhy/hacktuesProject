@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
@@ -24,12 +25,14 @@ int main()
     }
     printf("\nHow much trash do you want to collect today?: ");
     scanf("%d",&brbokluk);
-    for (int n=0; n<brbokluk; n++){
-    RandFunction(x,y,a);
-    PrintArr(a);
+    for (int n=0; n<brbokluk; n++)
+    {
+      RandFunction(x,y,a);
+      PrintArr(a);
     }
-    printf("\nTova e vasheto choveche - 'O'");
-    printf("\nIzberete na kyde da se dvijite!");
+
+    //printf("\nTova e vasheto choveche - 'O'");
+    //printf("\nIzberete na kyde da se dvijite!");
     Choveche(y,x,a);
     PrintArr(a);
     x=100;
@@ -80,6 +83,7 @@ int Move(int x, int y, char a[50][200])
     char searchRight = 'd';
     char searchUp = 'w';
     char searchDown = 's';
+
     char searchLeftD = '1';
     char searchRightD = '2';
     char searchUpD = '3';
@@ -121,54 +125,83 @@ int Move(int x, int y, char a[50][200])
             }
         }
 
-        if (posoka == searchLeft) {
-            if (a[y][x-1]=='W') {
+        if (posoka == searchLeft)
+        {
+             if (a[y][x-1]=='W')
+            {
                 printf("You collected trash!");
                 delay(2);
                 a[y][x-1]='X';
                 br++;
             }
-            else {
+             else if(a[y][x-1]=='X'&&br>=1)
+            {
+                printf("You have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+             else
+            {
             a[y][x-1]='O';
             a[y][x]=' ';
             }
         }
-        if (posoka == searchRight) {
-            if (a[y][x+1]=='W'){
+
+        if (posoka == searchRight)
+        {
+            if (a[y][x+1]=='W')
+            {
                 printf("You collected trash!");
                 delay(2);
                 a[y][x+1]='X';
                 br++;
+            } else if(a[y][x+1]=='X' && br>=1)
+            {
+                printf("You have already taken this trash! You can't step on it.");
+                a[y][x]='O';
             }
-            else {
+            else
+            {
             a[y][x+1]='O';
             a[y][x]=' ';
             }
         }
+
         if (posoka == searchUp ) {
-            if (a[y-1][x]=='W'){
+            if (a[y-1][x]=='W')
+            {
                 printf("You collected trash!");
                 delay(2);
                 a[y-1][x]='X';
                 br++;
             }
-            else{
-            a[y-1][x]='O';
-            a[y][x]=' ';
+            else if(a[y-1][x]=='X' &&br>=1)
+            {
+            printf("You have already taken this trash! You can't step on it.");
+            a[y][x]='O';
+            } else {
+                a[y-1][x]='O';
+                a[y][x]=' ';
             }
         }
-        if (posoka == searchDown ) {
+
+        if (posoka == searchDown )
+        {
             if (a[y+1][x]=='W'){
                 printf("You collected trash!");
                 delay(2);
                 a[y+1][x]='X';
                 br++;
             }
-            else {
-            a[y+1][x]='O';
-            a[y][x]=' ';
+            else if(a[y+1][x]=='X' && br>=1)
+            {
+              printf("You have already taken this trash! You can't step on it.");
+              a[y][x]='O';
+            } else {
+                a[y+1][x]='O';
+                a[y][x]=' ';
             }
         }
+
         return br;
 }
 SearchOY(char a[50][200])
@@ -206,6 +239,5 @@ void delay(int number_of_seconds)
     // Storing start time
     clock_t start_time = clock();
     // looping till required time is not achieved
-    while (clock() < start_time + milli_seconds)
-        ;
+    while (clock() < start_time + milli_seconds);
 }
