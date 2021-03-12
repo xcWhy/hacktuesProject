@@ -84,7 +84,7 @@ int Choveche(int y, int x, char a[50][200])
 int Move(int x, int y, char a[50][200])
 {
     int k=0;
-    x=25;
+    x=100;
     y=25;
     char posoka;
     char searchLeft = 'a';
