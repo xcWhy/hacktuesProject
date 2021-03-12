@@ -8,7 +8,7 @@ int main()
     srand(time(NULL));
     char a[50][200];
     int bokluk[50][200];
-    int x,y;
+    int x,y,br,brbokluk;
 
     for (y=0; y<50; y++)
     {
@@ -24,19 +24,27 @@ int main()
         }
     }
 
-    for (int n=0; n<5; n++){
-    RandFunction(x,y,a);
+    printf("\nHow much trash do you want to collect today?: ");
+    scanf("%d",&brbokluk);
 
+    for (int n=0; n<brbokluk; n++){
+    RandFunction(x,y,a);
     PrintArr(a);
     }
 
-    printf("\nTova e vasheto choveche!");
+    printf("\nTova e vasheto choveche - 'O'");
     printf("\nIzberete na kyde da se dvijite!");
-
     Choveche(y,x,a);
     PrintArr(a);
-    Move(y,x,a);
-    PrintArr(a);
+
+    x=100;
+    y=25;
+
+    do
+    {
+        br=Move(y,x,a);
+        PrintArr(a);
+    }while(br!=brbokluk);
 
 }
 
@@ -63,8 +71,8 @@ int RandFunction(int x, int y, char a[50][200])
 {
     srand(time(NULL));
     do{
-    x=rand()%198;
-    y=rand()%48;
+    x=rand()%197 + 1;
+    y=rand()%47 + 1;
     }while(a[y][x]=='W' || a[25][100]!=' ');
 
     a[y][x]='W';
@@ -83,9 +91,7 @@ int Choveche(int y, int x, char a[50][200])
 
 int Move(int x, int y, char a[50][200])
 {
-    int k=0;
-    x=100;
-    y=25;
+    int k=0,br=0;
     char posoka;
     char searchLeft = 'a';
     char searchRight = 'd';
@@ -99,16 +105,27 @@ int Move(int x, int y, char a[50][200])
 
         if (posoka == searchLeft) {
 
+            if (a[y][x-1]=='W') {
+                printf("You collected trash!");
+                a[y][x-1]='X';
+                br++;
+            }
+            else {
             a[y][x-1]='O';
             a[y][x]=' ';
-
+            }
         }
 
         if (posoka == searchRight) {
-
+            if (a[y][x+1]=='W'){
+                printf("You collected trash!");
+                a[y][x+1]=='X';
+                br++;
+            }
+            else {
             a[y][x+1]='O';
             a[y][x]=' ';
-
+            }
         }
 
         if (posoka == searchUp ) {
@@ -125,7 +142,14 @@ int Move(int x, int y, char a[50][200])
 
         }
 
+        return br;
+
 }
+
+
+
+
+
 
 
 
