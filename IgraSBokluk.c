@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
@@ -134,16 +133,16 @@ int Move(int x, int y, char a[50][200])
                 a[y][x-1]='X';
                 br++;
             }
-             else if(a[y][x-1]=='X'&&br>=1)
+             if(a[y][x-1]=='X'&&br>=1)
             {
                 printf("You have already taken this trash! You can't step on it.");
                 a[y][x]='O';
             }
-             else
-            {
-            a[y][x-1]='O';
-            a[y][x]=' ';
-            }
+             if(a[y][x-1]==' ')
+             {
+              a[y][x-1]='O';
+              a[y][x]=' ';
+             }
         }
 
         if (posoka == searchRight)
@@ -154,15 +153,16 @@ int Move(int x, int y, char a[50][200])
                 delay(2);
                 a[y][x+1]='X';
                 br++;
-            } else if(a[y][x+1]=='X' && br>=1)
+            }
+             if(a[y][x+1]=='X' && br>=1)
             {
                 printf("You have already taken this trash! You can't step on it.");
                 a[y][x]='O';
             }
-            else
+             if(a[y][x+1]==' ')
             {
-            a[y][x+1]='O';
-            a[y][x]=' ';
+               a[y][x+1]='O';
+               a[y][x]=' ';
             }
         }
 
@@ -174,11 +174,13 @@ int Move(int x, int y, char a[50][200])
                 a[y-1][x]='X';
                 br++;
             }
-            else if(a[y-1][x]=='X' &&br>=1)
+            if(a[y-1][x]=='X' &&br>=1)
             {
-            printf("You have already taken this trash! You can't step on it.");
-            a[y][x]='O';
-            } else {
+                printf("You have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+            if(a[y-1][x]==' ')
+            {
                 a[y-1][x]='O';
                 a[y][x]=' ';
             }
@@ -192,11 +194,13 @@ int Move(int x, int y, char a[50][200])
                 a[y+1][x]='X';
                 br++;
             }
-            else if(a[y+1][x]=='X' && br>=1)
+            if(a[y+1][x]=='X' && br>=1)
             {
-              printf("You have already taken this trash! You can't step on it.");
-              a[y][x]='O';
-            } else {
+                printf("You have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+            if(a[y+1][x]==' ')
+            {
                 a[y+1][x]='O';
                 a[y][x]=' ';
             }
@@ -241,3 +245,4 @@ void delay(int number_of_seconds)
     // looping till required time is not achieved
     while (clock() < start_time + milli_seconds);
 }
+
