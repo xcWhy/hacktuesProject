@@ -8,7 +8,7 @@ int main()
     system("COLOR 20");
     srand(time(NULL));
     char a[50][200];
-    int bokluk[50][200];
+    //int bokluk[50][200];
     int x,y,br,brbokluk;
 
     for (y=0; y<50; y++)
@@ -28,18 +28,16 @@ int main()
     printf("\nHow much trash do you want to collect today?: ");
     scanf("%d",&brbokluk);
 
-    for (int n=0; n<brbokluk; n++){
+    for (int n=0; n<brbokluk; n++)
+    {
     RandFunction(x,y,a);
     PrintArr(a);
     }
 
     printf("\nTova e vasheto choveche - 'O'");
-    printf("\nIzberete na kyde da se dvijite!");
+    //printf("\nIzberete na kyde da se dvijite!");
     Choveche(y,x,a);
     PrintArr(a);
-
-    x=100;
-    y=25;
 
     do
     {
@@ -63,9 +61,6 @@ int PrintArr(char a[50][200])
         }
 
     }
-
-
-
 }
 
 int RandFunction(int x, int y, char a[50][200])
@@ -82,19 +77,17 @@ int RandFunction(int x, int y, char a[50][200])
 int Choveche(int y, int x, char a[50][200])
 {
     char moves;
-    char o;
+    //char o;
     //o = 'o|--C';
     a[25][100]='O';
     printf("\n");
-
-
 }
 
 int Move(int x, int y, char a[50][200])
 {
     int k=0,br=0;
-    x=100;
-    y=25;
+    /*x=100;
+    y=25;*/
     char posoka;
     char searchLeft = 'a';
     char searchRight = 'd';
@@ -106,7 +99,7 @@ int Move(int x, int y, char a[50][200])
     char searchUpD = '3';
     char searchDownD = '4';
 
-    printf("\nPosoka: ");
+    printf("\nPosoka (1=10 v lqvo; 2=10 v dqsno; 3=10 nagore; 4=10 nadolu)\n a=1 v lqvo; d=1 v dqsno; w=1 nagore; s=1 nadolu: ");
     posoka=getchar();
 
     y=SearchOY(a);
@@ -132,17 +125,20 @@ int Move(int x, int y, char a[50][200])
             a[y][x]=' ';
         }
 
-        if (posoka == searchLeft) {
-
+        if (posoka == searchLeft){
             if (a[y][x-1]=='W') {
                 printf("You collected trash!");
                 delay(2);
                 a[y][x-1]='X';
                 br++;
             }
-            else {
-            a[y][x-1]='O';
-            a[y][x]=' ';
+            else if(a[y][x-1]=='X'){
+            printf("\nYou are next to trash. You can't step on it!");
+            a[y][x]='O';
+            //a[y][x]=' ';
+            } else if(a[y][x-1]==' '){
+                a[y][x-1]='O';
+                a[y][x]=' ';
             }
         }
 
@@ -152,10 +148,13 @@ int Move(int x, int y, char a[50][200])
                 delay(2);
                 a[y][x+1]='X';
                 br++;
-            }
-            else {
-            a[y][x+1]='O';
-            a[y][x]=' ';
+            } else if(a[y][x+1]=='X')
+            {
+                printf("\nYou are next to trash. You can't step on it!");
+                a[y][x]='O';
+            } else if(a[y][x+1]==' '){
+                a[y][x+1]='O';
+                a[y][x]=' ';
             }
         }
 
@@ -165,10 +164,12 @@ int Move(int x, int y, char a[50][200])
                 delay(2);
                 a[y-1][x]='X';
                 br++;
-            }
-            else{
-            a[y-1][x]='O';
-            a[y][x]=' ';
+            } else if(a[y-1][x]=='X'){
+                printf("\nYou are next to trash. You can't step on it!");
+                a[y][x]='O';
+            } else if(a[y-1][x]==' '){
+                a[y-1][x]='O';
+                a[y][x]=' ';
             }
         }
 
@@ -178,17 +179,15 @@ int Move(int x, int y, char a[50][200])
                 delay(2);
                 a[y+1][x]='X';
                 br++;
-            }
-            else {
-            a[y+1][x]='O';
-            a[y][x]=' ';
+            } else if(a[y+1][x]=='X'){
+                printf("\nYou are next to trash! You can't step on it!");
+                a[y][x]='O';
+            } else if(a[y+1][x]==' '){
+                a[y+1][x]='O';
+                a[y][x]=' ';
             }
         }
-
-
-
         return br;
-
 }
 
 SearchOY(char a[50][200])
@@ -231,7 +230,5 @@ void delay(int number_of_seconds)
     clock_t start_time = clock();
 
     // looping till required time is not achieved
-    while (clock() < start_time + milli_seconds)
-        ;
+    while (clock() < start_time + milli_seconds);
 }
-
