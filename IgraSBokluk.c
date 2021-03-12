@@ -92,6 +92,8 @@ int Choveche(int y, int x, char a[50][200])
 int Move(int x, int y, char a[50][200])
 {
     int k=0,br=0;
+    x=100;
+    y=25;
     char posoka;
     char searchLeft = 'a';
     char searchRight = 'd';
@@ -100,7 +102,8 @@ int Move(int x, int y, char a[50][200])
     printf("\nPosoka: ");
     posoka=getchar();
 
-
+    y=SearchOY(a);
+    x=SearchOX(a);
 
 
         if (posoka == searchLeft) {
@@ -146,17 +149,34 @@ int Move(int x, int y, char a[50][200])
 
 }
 
+SearchOY(char a[50][200])
+{
+    int x,y;
+    for (y=0;y<49;y++)
+    {
+        for (x=0; x<199; x++)
+        {
+            if (a[y][x]=='O') {
+                return y;
+                break;
 
+            }
+        }
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
+SearchOX(char a[50][200])
+{
+    int x,y;
+    for (y=0;y<49;y++)
+    {
+        for (x=0; x<199; x++)
+        {
+            if (a[y][x]=='O') {
+                return x;
+                break;
+            }
+        }
+    }
+}
 
