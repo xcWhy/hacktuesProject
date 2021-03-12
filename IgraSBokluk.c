@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <time.h>
 int main()
 {
-    system("COLOR 2F");
+    system("COLOR 20");
     srand(time(NULL));
     char a[50][200];
     int bokluk[50][200];
@@ -23,14 +24,19 @@ int main()
         }
     }
 
-    for (int n=0; n<20; n++){
+    for (int n=0; n<5; n++){
     RandFunction(x,y,a);
 
     PrintArr(a);
     }
 
     printf("\nTova e vasheto choveche!");
-    printf("Izberete na kyde da se dvijite!");
+    printf("\nIzberete na kyde da se dvijite!");
+
+    Choveche(y,x,a);
+    PrintArr(a);
+    Move(y,x,a);
+    PrintArr(a);
 
 }
 
@@ -67,9 +73,9 @@ int RandFunction(int x, int y, char a[50][200])
 int Choveche(int y, int x, char a[50][200])
 {
     char moves;
-    char C;
-    C='o|--C';
-    a[25][100]=C;
+    char o;
+    //o = 'o|--C';
+    a[25][100]='O';
     printf("\n");
 
 
@@ -78,46 +84,53 @@ int Choveche(int y, int x, char a[50][200])
 int Move(int x, int y, int a[50][200])
 {
     int k=0;
+    x=25;
+    y=25;
     char posoka;
-    char searchLeft = "left";
-    char searchRight = "right";
-    char searchUp = "up";
-    char searchDown = "down";
-    printf("Posoka: ");
+    char searchLeft = 'a';
+    char searchRight = 'd';
+    char searchUp = 'w';
+    char searchDown = 's';
+    printf("\nPosoka: ");
     posoka=getchar();
 
-    char ptr1 = strstr(posoka, searchLeft);
-    char ptr2 = strstr(posoka, searchRight);
-    char ptr3 = strstr(posoka, searchUp);
-    char ptr4 = strstr(posoka, searchDown);
 
-    do{
-        if (ptr1 != NULL) {
-            a[y][x-1]='C';
+
+
+        if (posoka == searchLeft) {
+
+            a[y][x-1]='O';
             a[y][x]=' ';
-            break;
+
         }
 
-        if (ptr2 != NULL) {
-            a[y][x+1]='C';
+        if (posoka == searchRight) {
+
+            a[y][x+1]='O';
             a[y][x]=' ';
-            break;
+
         }
 
-        if (ptr3 != NULL) {
-            a[y-1][x]='C';
+        if (posoka == searchUp ) {
+
+            a[y-1][x]='O';
             a[y][x]=' ';
+
         }
 
-        if (ptr4 != NULL) {
-            a[y+1][x]='C';
+        if (posoka == searchDown ) {
+
+            a[y+1][x]='O';
             a[y][x]=' ';
-            break;
+
         }
-
-
 
 }
+
+
+
+
+
 
 
 
