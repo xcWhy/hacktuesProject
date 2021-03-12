@@ -99,17 +99,43 @@ int Move(int x, int y, char a[50][200])
     char searchRight = 'd';
     char searchUp = 'w';
     char searchDown = 's';
+
+    char searchLeftD = '1';
+    char searchRightD = '2';
+    char searchUpD = '3';
+    char searchDownD = '4';
+
     printf("\nPosoka: ");
     posoka=getchar();
 
     y=SearchOY(a);
     x=SearchOX(a);
 
+        if (posoka == searchLeftD){
+            if (a[y][x-10]=='X' || a[y][x-10]=='W') a[y][x-1]='O'; 
+            a[y][x]=' ';
+        }
+
+        if (posoka == searchRightD){
+            a[y][x+10]='O';
+            a[y][x]=' ';
+        }
+
+        if (posoka == searchUpD){
+            a[y-10][x]='O';
+            a[y][x]=' ';
+        }
+
+        if (posoka == searchDownD){
+            a[y+10][x-10]='O';
+            a[y][x]=' ';
+        }
 
         if (posoka == searchLeft) {
 
             if (a[y][x-1]=='W') {
                 printf("You collected trash!");
+                delay(2);
                 a[y][x-1]='X';
                 br++;
             }
@@ -122,7 +148,8 @@ int Move(int x, int y, char a[50][200])
         if (posoka == searchRight) {
             if (a[y][x+1]=='W'){
                 printf("You collected trash!");
-                a[y][x+1]=='X';
+                delay(2);
+                a[y][x+1]='X';
                 br++;
             }
             else {
@@ -132,18 +159,32 @@ int Move(int x, int y, char a[50][200])
         }
 
         if (posoka == searchUp ) {
-
+            if (a[y-1][x]=='W'){
+                printf("You collected trash!");
+                delay(2);
+                a[y-1][x]='X';
+                br++;
+            }
+            else{
             a[y-1][x]='O';
             a[y][x]=' ';
-
+            }
         }
 
         if (posoka == searchDown ) {
-
+            if (a[y+1][x]=='W'){
+                printf("You collected trash!");
+                delay(2);
+                a[y+1][x]='X';
+                br++;
+            }
+            else {
             a[y+1][x]='O';
             a[y][x]=' ';
-
+            }
         }
+
+
 
         return br;
 
@@ -178,5 +219,18 @@ SearchOX(char a[50][200])
             }
         }
     }
+}
+
+void delay(int number_of_seconds)
+{
+    // Converting time into milli_seconds
+    int milli_seconds = 1000 * number_of_seconds;
+
+    // Storing start time
+    clock_t start_time = clock();
+
+    // looping till required time is not achieved
+    while (clock() < start_time + milli_seconds)
+        ;
 }
 
