@@ -3,8 +3,9 @@
 #include <conio.h>
 int main()
 {
+    system("COLOR 2F");
     srand(time(NULL));
-    int a[50][200];
+    char a[50][200];
     int bokluk[50][200];
     int x,y;
 
@@ -27,13 +28,14 @@ int main()
 
     PrintArr(a);
     }
-    Choveche(y,x,a);
 
-    PrintArr(a);
+    printf("\nTova e vasheto choveche!");
+    printf("Izberete na kyde da se dvijite!");
+
 }
 
 
-int PrintArr(int a[50][200])
+int PrintArr(char a[50][200])
 {
     int y,x;
     system("cls"); // za triene
@@ -51,7 +53,7 @@ int PrintArr(int a[50][200])
 
 }
 
-int RandFunction(int x, int y, int a[50][200])
+int RandFunction(int x, int y, char a[50][200])
 {
     srand(time(NULL));
     do{
@@ -62,25 +64,62 @@ int RandFunction(int x, int y, int a[50][200])
     a[y][x]='W';
 }
 
-int Choveche(int y, int x, int a[50][200])
+int Choveche(int y, int x, char a[50][200])
 {
     char moves;
-    a[25][100]='o|--c';
+    char C;
+    C='o|--C';
+    a[25][100]=C;
     printf("\n");
 
-    moves=getchar();
-    switch(moves)
-    {
-        case w: y--;
-        case s: y++;
-        case a: x--;
-        case d: x++;
-    }
 
-    printf(" O\n");
-    printf("/|\");
-    printf("\n/ ");
-    printf("/ \");
-    return 0;
 }
+
+int Move(int x, int y, int a[50][200])
+{
+    int k=0;
+    char posoka;
+    char searchLeft = "left";
+    char searchRight = "right";
+    char searchUp = "up";
+    char searchDown = "down";
+    printf("Posoka: ");
+    posoka=getchar();
+
+    char ptr1 = strstr(posoka, searchLeft);
+    char ptr2 = strstr(posoka, searchRight);
+    char ptr3 = strstr(posoka, searchUp);
+    char ptr4 = strstr(posoka, searchDown);
+
+    do{
+        if (ptr1 != NULL) {
+            a[y][x-1]='C';
+            a[y][x]=' ';
+            break;
+        }
+
+        if (ptr2 != NULL) {
+            a[y][x+1]='C';
+            a[y][x]=' ';
+            break;
+        }
+
+        if (ptr3 != NULL) {
+            a[y-1][x]='C';
+            a[y][x]=' ';
+        }
+
+        if (ptr4 != NULL) {
+            a[y+1][x]='C';
+            a[y][x]=' ';
+            break;
+        }
+
+
+
+}
+
+
+
+
 
