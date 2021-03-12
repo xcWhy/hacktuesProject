@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
+
 int main()
 {
     system("COLOR 20");
@@ -112,22 +113,22 @@ int Move(int x, int y, char a[50][200])
     x=SearchOX(a);
 
         if (posoka == searchLeftD){
-            if (a[y][x-10]=='X' || a[y][x-10]=='W') a[y][x-1]='O'; 
+            if (a[y][x-10]=='X' || a[y][x-10]=='W') a[y][x-1]='O';
             a[y][x]=' ';
         }
 
         if (posoka == searchRightD){
-            a[y][x+10]='O';
+            if (a[y][x+10]=='X' || a[y][x+10]=='W') a[y][x+1]='O';
             a[y][x]=' ';
         }
 
         if (posoka == searchUpD){
-            a[y-10][x]='O';
+            if(a[y-10][x]=='X' || a[y-10][x]=='W') a[y-1][x]='O';
             a[y][x]=' ';
         }
 
         if (posoka == searchDownD){
-            a[y+10][x-10]='O';
+            if(a[y+10][x]=='X' || a[y+10][x]=='W') a[y+1][x]='O';
             a[y][x]=' ';
         }
 
