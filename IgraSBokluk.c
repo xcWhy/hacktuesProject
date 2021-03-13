@@ -10,6 +10,11 @@ int main()
     char a[50][200];
     //int bokluk[50][200];
     int x,y,br,brbokluk;
+    char recpa='H';
+    char recpl='P';
+    char recgl='S';
+
+
     for (y=0; y<50; y++)
     {
         printf("\n");
@@ -23,6 +28,10 @@ int main()
             printf("%c", a[y][x]);
         }
     }
+
+    a[48][98]='H';
+    a[48][100]='P';
+    a[48][102]='S';
     printf("\nHow much trash do you want to collect today?: ");
     scanf("%d",&brbokluk);
     for (int n=0; n<brbokluk; n++)
@@ -41,6 +50,9 @@ int main()
         PrintArr(a);
     }while(br!=brbokluk);
 
+    /*do{
+
+    }*/
     do{
         RecycleBin(x,y,a);
         PrintArr(a);
@@ -74,7 +86,7 @@ int RandFunction(int x, int y, char a[50][200])
 int Choveche(int y, int x, char a[50][200])
 {
     char moves;
-    char o;
+    //char o;
     //o = 'o|--C';
     a[25][100]='O';
     printf("\n");
@@ -217,16 +229,33 @@ int Move(int x, int y, char a[50][200])
         return br;
 }
 
+HasTrash(int y, int x, int a[50][200],int br)
+{
+    br=Move(x,y,a);
+    if ((a[y][x-1]=='H' || a[y][x+1]=='H' || a[y+1][x]=='H') && br!=0){
+        printf("\nYou threw some paper!");
+        a[50][98]='H';
+        a[y][x]='O';
+    }
+    else printf("\nYou don't have any trash with you! \nYou can't throw yourself - you are not from paper?!");
+
+    if ((a[y][x-1]=='P' || a[y][x+1]=='P' || a[y+1][x]=='P') && br!=0){
+        printf("\nYou threw some plastic materials!");
+        a[50][100]='P';
+        a[y][x]='O';
+    }
+    else printf("\nYou don't have any trash with you! \nGo collect some, before I see you again here empty handed!");
+
+    if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br!=0){
+        printf("\nYou threw some glass!");
+        a[50][102]='S';
+        a[y][x]='O';
+    }
+    else printf("\nYou don't have any trash with you! \nYou are not from glass?!");
+}
+
 int RecycleBin(int x, int y, char a[50][200])
 {
-    char recpa='H';
-    char recpl='P';
-    char recgl='S';
-
-    a[48][98]='H';
-    a[48][100]='P';
-    a[48][102]='S';
-
     char posoka;
     char searchLeft = 'a';
     char searchRight = 'd';
@@ -328,26 +357,6 @@ int RecycleBin(int x, int y, char a[50][200])
             }
         }
 
-        /*if (posoka == searchUp ) {
-            if (a[y-1][x]=='W')
-            {
-                printf("You collected trash!");
-                delay(2);
-                a[y-1][x]='X';
-                br++;
-            }
-            if(a[y-1][x]=='X' &&br>=1)
-            {
-                printf("You have already taken this trash! You can't step on it.");
-                a[y][x]='O';
-            }
-            if(a[y-1][x]==' ')
-            {
-                a[y-1][x]='O';
-                a[y][x]=' ';
-            }
-        }*/
-
         if (posoka == searchDown )
         {
             /*if (a[y+1][x]=='W'){
@@ -361,6 +370,7 @@ int RecycleBin(int x, int y, char a[50][200])
                 printf("You have already taken this trash! You can't step on it.");
                 a[y][x]='O';
             }*/
+
             if(a[y+1][x]=='H'||a[y+1][x]=='P'||a[y+1][x]=='S')
             {
                 printf("Congratulations! You have just thrown your trash in the recycle bin!");
@@ -409,10 +419,7 @@ SearchOX(char a[50][200])
 
 void delay(int number_of_seconds)
 {
-    // Converting time into milli_seconds
     int milli_seconds = 1000 * number_of_seconds;
-    // Storing start time
     clock_t start_time = clock();
-    // looping till required time is not achieved
     while (clock() < start_time + milli_seconds);
 }
