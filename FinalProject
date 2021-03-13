@@ -252,7 +252,7 @@ int Move(int x, int y, char a[50][200],int br)
  void HasTrash(int y, int x, char a[50][200],int br)
 {
 
-    if ((a[47][98]=='O' || a[48][96]=='O' || a[48][99]=='O') && br!=0){ // hartiq 48 98 //
+    if ((a[47][98]=='O' || a[48][97]=='O' || a[48][99]=='O') && br!=0){ // hartiq 48 98 //
         printf("\nYou threw some paper!");
         delay(2);
         a[48][98]='H';
@@ -260,7 +260,7 @@ int Move(int x, int y, char a[50][200],int br)
         br=0;
     }
 
-    if ((a[47][98]=='O' || a[48][96]=='O' || a[48][99]=='O') && br==0){
+    if ((a[47][98]=='O' || a[48][97]=='O' || a[48][99]=='O') && br==0){
              printf("\nYou don't have any trash with you! \nYou can't throw yourself - you are not from paper?!");
              delay(2);
             }
