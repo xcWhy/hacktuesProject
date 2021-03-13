@@ -49,6 +49,7 @@ int main()
     do
     {
         br=Move(x,y,a);
+        HasTrash(y,x,a,br);
         PrintArr(a);
     }while(br!=brbokluk);
 
@@ -241,21 +242,36 @@ HasTrash(int y, int x, int a[50][200],int br)
         a[50][98]='H';
         a[y][x]='O';
     }
-    else printf("\nYou don't have any trash with you! \nYou can't throw yourself - you are not from paper?!");
+
+    if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br==0){
+             printf("\nYou don't have any trash with you! \nYou can't throw yourself - you are not from paper?!");
+             delay(2);
+            }
+
 
     if ((a[y][x-1]=='P' || a[y][x+1]=='P' || a[y+1][x]=='P') && br!=0){
         printf("\nYou threw some plastic materials!");
         a[50][100]='P';
         a[y][x]='O';
     }
-    else printf("\nYou don't have any trash with you! \nGo collect some, before I see you again here empty handed!");
+
+    if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br==0){
+            printf("\nYou don't have any trash with you! \nGo collect some, before I see you again here empty handed!");
+            delay(2);
+        }
 
     if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br!=0){
         printf("\nYou threw some glass!");
         a[50][102]='S';
         a[y][x]='O';
     }
-    else printf("\nYou don't have any trash with you! \nYou are not from glass?!");
+
+    if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br==0){
+            printf("\nYou don't have any trash with you! \nYou are not from glass so don't throw yourself?!");
+            delay(2);
+        }
+
+
 }
 
 void CollectedTrash()
