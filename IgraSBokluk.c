@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
-
+int PrintArr(char a[50][200]);
+void CollectedTrash();
 int main()
 {
     system("COLOR 20");
     srand(time(NULL));
     char a[50][200];
     //int bokluk[50][200];
-    int x,y,br,brbokluk,Kbr=0;
+    int x,y,br=0,brbokluk,Kbr=0;
     char recpa='H';
     char recpl='P';
     char recgl='S';
@@ -20,9 +21,9 @@ int main()
         printf("\n");
         for(x=0; x<200; x++)
         {
-            if (y==0 || y==49) a[y][x]=' -';
+            if (y==0 || y==49) a[y][x]='-';
             else{
-                if (x==0 || x==199) a[y][x]=' |';
+                if (x==0 || x==199) a[y][x]='|';
                 else a[y][x]=' ';
             }
             printf("%c", a[y][x]);
@@ -36,6 +37,7 @@ int main()
     printf("\nHow much trash do you want to collect today?: ");
     scanf("%d",&brbokluk);
     }while(brbokluk<1 || brbokluk>9000);
+    
     for (int n=0; n<brbokluk; n++)
     {
       RandFunction(x,y,a);
@@ -44,8 +46,7 @@ int main()
 
     Choveche(y,x,a);
     PrintArr(a);
-    x=100;
-    y=25;
+
     do
     {
         br=Move(x,y,a);
@@ -58,6 +59,7 @@ int main()
     }*/
     do{
         Kbr=RecycleBin(x,y,a);
+
         PrintArr(a);
     }while(Kbr!=1);
 }
@@ -100,8 +102,7 @@ int Choveche(int y, int x, char a[50][200])
 int Move(int x, int y, char a[50][200])
 {
     int k=0,br=0;
-    x=100;
-    y=25;
+
     char posoka;
     char searchLeft = 'a';
     char searchRight = 'd';
@@ -234,39 +235,45 @@ int Move(int x, int y, char a[50][200])
         return br;
 }
 
-HasTrash(int y, int x, int a[50][200],int br)
+ void HasTrash(int y, int x, char a[50][200],int br)
 {
-    br=Move(x,y,a);
-    if ((a[y][x-1]=='H' || a[y][x+1]=='H' || a[y+1][x]=='H') && br!=0){
+    char i;
+    printf("\n\nDEBUG %c %c %c %d",a[47][98], a[48][96], a[48][99], br);
+    fflush(stdin);
+    scanf("%c",&i);
+    if ((a[47][98]=='O' || a[48][96]=='O' || a[48][99]=='O') && br!=0){ // hartiq 48 98 //
         printf("\nYou threw some paper!");
-        a[50][98]='H';
+        delay(2);
+        a[48][98]='H';
         a[y][x]='O';
     }
 
-    if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br==0){
+    if ((a[47][98]=='O' || a[48][96]=='O' || a[48][99]=='O') && br==0){
              printf("\nYou don't have any trash with you! \nYou can't throw yourself - you are not from paper?!");
              delay(2);
             }
 
 
-    if ((a[y][x-1]=='P' || a[y][x+1]=='P' || a[y+1][x]=='P') && br!=0){
+    if ((a[47][100]=='O' || a[48][99]=='O' || a[48][101]=='O') && br!=0){ //plastmasa
         printf("\nYou threw some plastic materials!");
-        a[50][100]='P';
+        delay(2);
+        a[48][100]='P';
         a[y][x]='O';
     }
 
-    if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br==0){
+    if ((a[47][100]=='O' || a[48][99]=='O' || a[48][101]=='O') && br==0){
             printf("\nYou don't have any trash with you! \nGo collect some, before I see you again here empty handed!");
             delay(2);
         }
 
-    if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br!=0){
+    if ((a[47][101]=='O' || a[48][99]=='O' || a[48][103]=='O') && br!=0){ //styklo
         printf("\nYou threw some glass!");
-        a[50][102]='S';
+        delay(2);
+        a[48][102]='S';
         a[y][x]='O';
     }
 
-    if ((a[y][x-1]=='S' || a[y][x+1]=='S' || a[y+1][x]=='S') && br==0){
+    if ((a[47][101]=='O' || a[48][99]=='O' || a[48][103]=='O') && br==0){
             printf("\nYou don't have any trash with you! \nYou are not from glass so don't throw yourself?!");
             delay(2);
         }
