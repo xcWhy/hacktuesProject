@@ -2,18 +2,22 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
+
 int PrintArr(char a[50][200]);
 void CollectedTrash();
+
 int main()
 {
     system("COLOR 20");
     srand(time(NULL));
     char a[50][200];
-    //int bokluk[50][200];
-    int x,y,br=0,brbokluk,Kbr=0;
+    int x,y,br=0,Kbr=0;
+    int brhar,brplast,brglass;
+    int brpap,brgl,brpl;
+
     char recpa='H';
     char recpl='P';
-    char recgl='S';
+    char recgl='G';
 
 
     for (y=0; y<50; y++)
@@ -32,49 +36,75 @@ int main()
 
     a[48][98]='H';
     a[48][100]='P';
-    a[48][102]='S';
-    do{
-    printf("\nHow much trash do you want to collect today?: ");
-    scanf("%d",&brbokluk);
-    }while(brbokluk<1 || brbokluk>9000);
+    a[48][102]='G';
 
-    for (int n=0; n<brbokluk; n++)
+    do{
+    printf("\nHow much paper do you want to collect from the field: ");
+    scanf("%d",&brhar);
+    }while(brhar<1 || brhar>3000);
+
+    do{
+    printf("\nHow much plastic materials do you want to collect from the field?: ");
+    scanf("%d",&brplast);
+    }while(brplast<1 || brplast>3000);
+
+    do{
+    printf("\nHow much glass do you want to collect from the field?: ");
+    scanf("%d",&brglass);
+    }while(brglass<1 || brglass>3000);
+
+    for (int n=0; n<brhar; n++)
     {
-      RandFunction(x,y,a);
+      RandFunctionHar(x,y,a);
+      PrintArr(a);
+    }
+
+    for (int n=0; n<brplast; n++)
+    {
+      RandFunctionPlast(x,y,a);
+      PrintArr(a);
+    }
+
+    for (int n=0; n<brglass; n++)
+    {
+      RandFunctionGlass(x,y,a);
       PrintArr(a);
     }
 
     Choveche(y,x,a);
     PrintArr(a);
 
-    do
-    {
-        br=Move(x,y,a,br);
+    do{
+        brpap=MoveHar(x,y,a);
         HasTrash(y,x,a,br);
         PrintArr(a);
-    }while(br!=brbokluk);
+    }while(brpap!=brhar);
 
-    CollectedTrash();
+    CollectedPap();
+
+    do{
+        brpl=MovePlast(x,y,a);
+        HasTrash(y,x,a,br);
+        PrintArr(a);
+    }while(brpl!=brplast);
+
+    CollectedPl();
+
+    do
+    {
+        brgl=MoveGlass(x,y,a);
+        HasTrash(y,x,a,br);
+        PrintArr(a);
+    }while(brgl!=brglass);
+
+    CollectedGl();
 
     do{
         Kbr=RecycleBin(x,y,a);
-        //SearchForTrash(a,brbokluk);
+        //HasTrash(x,y,a,br);
         PrintArr(a);
     }while(Kbr!=1);
-
-    br=0;
-    Kbr=0;
-
-    do{
-    Kbr=TreeMove(y,x,a,br);
-    PrintArr(a);
-    }while(Kbr!=brbokluk);
-    
-    printf("\n\nCongrats on cleaning the area and planting the trees!!");
-    printf("\nYou may now rest!\n The end.");
 }
-
-//////////////////////////////////////////////////////////////////////////////////////
 
 int PrintArr(char a[50][200])
 {
@@ -90,14 +120,34 @@ int PrintArr(char a[50][200])
     }
 }
 
-int RandFunction(int x, int y, char a[50][200])
+int RandFunctionHar(int x, int y, char a[50][200])
 {
     srand(time(NULL));
     do{
     x=rand()%197 + 1;
     y=rand()%47 + 1;
-    }while(a[y][x]=='W' || a[25][100]!=' ');
-    a[y][x]='W';
+    }while(a[y][x]=='h' || a[25][100]!=' ');
+    a[y][x]='h';
+}
+
+int RandFunctionPlast(int x, int y, char a[50][200])
+{
+    srand(time(NULL));
+    do{
+    x=rand()%197 + 1;
+    y=rand()%47 + 1;
+    }while(a[y][x]=='p' || a[25][100]!=' ');
+    a[y][x]='p';
+}
+
+int RandFunctionGlass(int x, int y, char a[50][200])
+{
+    srand(time(NULL));
+    do{
+    x=rand()%197 + 1;
+    y=rand()%47 + 1;
+    }while(a[y][x]=='g' || a[25][100]!=' ');
+    a[y][x]='g';
 }
 
 int Choveche(int y, int x, char a[50][200])
@@ -109,10 +159,144 @@ int Choveche(int y, int x, char a[50][200])
     printf("\n");
 }
 
-int Move(int x, int y, char a[50][200],int br)
+int MoveHar(int x, int y, char a[50][200])
 {
-    int k=0;
+    int brpap=0;
+    char posoka;
+    char searchLeft = 'a';
+    char searchRight = 'd';
+    char searchUp = 'w';
+    char searchDown = 's';
 
+    char searchLeftD = '1';
+    char searchRightD = '2';
+    char searchUpD = '3';
+    char searchDownD = '4';
+    printf("\nPosoka (1=10 v lqvo; 2=10 v dqsno; 3=10 nagore; 4=10 nadolu)\n a=1 v lqvo; d=1 v dqsno; w=1 nagore; s=1 nadolu: ");
+    posoka=getchar();
+    y=SearchOY(a);
+    x=SearchOX(a);
+
+    if (posoka == searchLeftD){
+            if (a[y][x-10]=='X'||a[y][x-10]=='h'||a[y][x-10]=='H'||a[y][x-10]=='P'||a[y][x-10]=='G') a[y][x-1]='O';
+            else {
+            a[y][x-10]='O';
+            a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchRightD){
+            if (a[y][x+10]=='X'||a[y][x+10]=='h'||a[y][x+10]=='H'||a[y][x+10]=='P'||a[y][x+10]=='G') a[y][x+1]='O';
+            else {
+            a[y][x+10]='O';
+            a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchUpD){
+            if(a[y-10][x]=='X'||a[y-10][x]=='h'||a[y-10][x]=='H' || a[y-10][x]=='P' || a[y-10][x]=='G') a[y-1][x]='O';
+            else {
+            a[y-10][x]='O';
+            a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchDownD){
+            if(a[y+10][x]=='X'||a[y+10][x]=='h'||a[y+10][x]=='H'||a[y+10][x]=='P'||a[y+10][x]=='G') a[y+1][x]='O';
+            else {
+            a[y+10][x]='O';
+            a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchLeft)
+        {
+             if (a[y][x-1]=='h')
+            {
+                printf("\nYou collected paper!");
+                delay(2);
+                a[y][x-1]='X';
+                brpap++;
+            }
+             if(a[y][x-1]=='X'&&brpap>=1)
+            {
+                printf("\nYou have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+             if(a[y][x-1]==' ')
+             {
+              a[y][x-1]='O';
+              a[y][x]=' ';
+             }
+        }
+
+        if (posoka == searchRight)
+        {
+            if (a[y][x+1]=='h')
+            {
+                printf("\nYou collected paper!");
+                delay(2);
+                a[y][x+1]='X';
+                brpap++;
+            }
+             if(a[y][x+1]=='X' && brpap>=1)
+            {
+                printf("\nYou have already taken this trash! \nYou can't step on it.");
+                a[y][x]='O';
+            }
+             if(a[y][x+1]==' ')
+            {
+               a[y][x+1]='O';
+               a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchUp )
+        {
+            if (a[y-1][x]=='h')
+            {
+                printf("\nYou collected paper!");
+                delay(2);
+                a[y-1][x]='X';
+                brpap++;
+            }
+            if(a[y-1][x]=='X'&&brpap>=1)
+            {
+                printf("\nYou have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+            if(a[y-1][x]==' ')
+            {
+                a[y-1][x]='O';
+                a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchDown )
+        {
+            if (a[y+1][x]=='h'){
+                printf("\nYou collected paper!");
+                delay(2);
+                a[y+1][x]='X';
+                brpap++;
+            }
+            if(a[y+1][x]=='X' && brpap>=1)
+            {
+                printf("\nYou have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+            if(a[y+1][x]==' ')
+            {
+                a[y+1][x]='O';
+                a[y][x]=' ';
+            }
+        }
+    return brpap;
+}
+
+int MovePlast(int x,int y,char a[50][200])
+{
+    int brpl=0;
     char posoka;
     char searchLeft = 'a';
     char searchRight = 'd';
@@ -129,7 +313,7 @@ int Move(int x, int y, char a[50][200],int br)
     x=SearchOX(a);
 
         if (posoka == searchLeftD){
-            if (a[y][x-10]=='X' || a[y][x-10]=='W') a[y][x-1]='O';
+            if (a[y][x-10]=='X'||a[y][x-10]=='p'||a[y][x-10]=='H' || a[y][x-10]=='P'||a[y][x-10]=='G') a[y][x-1]='O';
             else {
             a[y][x-10]='O';
             a[y][x]=' ';
@@ -137,7 +321,7 @@ int Move(int x, int y, char a[50][200],int br)
         }
 
         if (posoka == searchRightD){
-            if (a[y][x+10]=='X' || a[y][x+10]=='W') a[y][x+1]='O';
+            if (a[y][x+10]=='X'||a[y][x+10]=='p'||a[y][x+10]=='H'||a[y][x+10]=='P'||a[y][x+10]=='G') a[y][x+1]='O';
             else {
             a[y][x+10]='O';
             a[y][x]=' ';
@@ -145,7 +329,7 @@ int Move(int x, int y, char a[50][200],int br)
         }
 
         if (posoka == searchUpD){
-            if(a[y-10][x]=='X' || a[y-10][x]=='W') a[y-1][x]='O';
+            if(a[y-10][x]=='X'||a[y-10][x]=='p'||a[y-10][x]=='H'||a[y-10][x]=='P'||a[y-10][x]=='G') a[y-1][x]='O';
             else {
             a[y-10][x]='O';
             a[y][x]=' ';
@@ -153,7 +337,7 @@ int Move(int x, int y, char a[50][200],int br)
         }
 
         if (posoka == searchDownD){
-            if(a[y+10][x]=='X' || a[y+10][x]=='W') a[y+1][x]='O';
+            if(a[y+10][x]=='X'||a[y+10][x]=='p'||a[y+10][x]=='H'||a[y+10][x]=='P'||a[y+10][x]=='G') a[y+1][x]='O';
             else {
             a[y+10][x]='O';
             a[y][x]=' ';
@@ -162,17 +346,16 @@ int Move(int x, int y, char a[50][200],int br)
 
         if (posoka == searchLeft)
         {
-             if (a[y][x-1]=='W')
+             if (a[y][x-1]=='p')
             {
-                printf("\nYou collected trash!");
+                printf("\nYou collected plastic materials!");
                 delay(2);
                 a[y][x-1]='X';
-                br++;
+                brpl++;
             }
-             if(a[y][x-1]=='X'&&br>=1)
+             if(a[y][x-1]=='X'&&brpl>=1)
             {
                 printf("\nYou have already taken this trash! You can't step on it.");
-                delay(2);
                 a[y][x]='O';
             }
              if(a[y][x-1]==' ')
@@ -184,17 +367,16 @@ int Move(int x, int y, char a[50][200],int br)
 
         if (posoka == searchRight)
         {
-            if (a[y][x+1]=='W')
+            if (a[y][x+1]=='p')
             {
-                printf("\nYou collected trash!");
+                printf("\nYou collected plastic materials!");
                 delay(2);
                 a[y][x+1]='X';
-                br++;
+                brpl++;
             }
-             if(a[y][x+1]=='X' && br>=1)
+             if(a[y][x+1]=='X' && brpl>=1)
             {
                 printf("\nYou have already taken this trash! \nYou can't step on it.");
-                delay(2);
                 a[y][x]='O';
             }
              if(a[y][x+1]==' ')
@@ -205,17 +387,16 @@ int Move(int x, int y, char a[50][200],int br)
         }
 
         if (posoka == searchUp ) {
-            if (a[y-1][x]=='W')
+            if (a[y-1][x]=='p')
             {
-                printf("\nYou collected trash!");
+                printf("\nYou collected plastic materials!");
                 delay(2);
                 a[y-1][x]='X';
-                br++;
+                brpl++;
             }
-            if(a[y-1][x]=='X' &&br>=1)
+            if(a[y-1][x]=='X' &&brpl>=1)
             {
                 printf("\nYou have already taken this trash! You can't step on it.");
-                delay(2);
                 a[y][x]='O';
             }
             if(a[y-1][x]==' ')
@@ -227,16 +408,15 @@ int Move(int x, int y, char a[50][200],int br)
 
         if (posoka == searchDown )
         {
-            if (a[y+1][x]=='W'){
-                printf("\nYou collected trash!");
+            if (a[y+1][x]=='p'){
+                printf("\nYou collected plastic materials!");
                 delay(2);
                 a[y+1][x]='X';
-                br++;
+                brpl++;
             }
-            if(a[y+1][x]=='X' && br>=1)
+            if(a[y+1][x]=='X' && brpl>=1)
             {
                 printf("\nYou have already taken this trash! You can't step on it.");
-                delay(2);
                 a[y][x]='O';
             }
             if(a[y+1][x]==' ')
@@ -245,64 +425,202 @@ int Move(int x, int y, char a[50][200],int br)
                 a[y][x]=' ';
             }
         }
-
-        return br;
 }
 
- void HasTrash(int y, int x, char a[50][200],int br)
+int MoveGlass(int x, int y, char a[50][200])
 {
+    int brgl=0;
+    char posoka;
+    char searchLeft = 'a';
+    char searchRight = 'd';
+    char searchUp = 'w';
+    char searchDown = 's';
 
-    if ((a[47][98]=='O' || a[48][96]=='O' || a[48][99]=='O') && br!=0){ // hartiq 48 98 //
+    char searchLeftD = '1';
+    char searchRightD = '2';
+    char searchUpD = '3';
+    char searchDownD = '4';
+    printf("\nPosoka (1=10 v lqvo; 2=10 v dqsno; 3=10 nagore; 4=10 nadolu)\n a=1 v lqvo; d=1 v dqsno; w=1 nagore; s=1 nadolu: ");
+    posoka=getchar();
+    y=SearchOY(a);
+    x=SearchOX(a);
+
+        if (posoka == searchLeftD){
+            if (a[y][x-10]=='X' ||a[y][x-10]=='g'||a[y][x-10]=='H' || a[y][x-10]=='P' || a[y][x-10]=='G') a[y][x-1]='O';
+            else {
+            a[y][x-10]='O';
+            a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchRightD){
+            if (a[y][x+10]=='X' ||a[y][x+10]=='g'||a[y][x+10]=='H' || a[y][x+10]=='P' || a[y][x+10]=='G') a[y][x+1]='O';
+            else {
+            a[y][x+10]='O';
+            a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchUpD){
+            if(a[y-10][x]=='X'||a[y-10][x]=='g'||a[y-10][x]=='H'||a[y-10][x]=='P'||a[y-10][x]=='G') a[y-1][x]='O';
+            else {
+            a[y-10][x]='O';
+            a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchDownD){
+            if(a[y+10][x]=='X'||a[y+10][x]=='g'||a[y+10][x]=='H'||a[y+10][x]=='P'||a[y+10][x]=='G') a[y+1][x]='O';
+            else {
+            a[y+10][x]='O';
+            a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchLeft)
+        {
+             if (a[y][x-1]=='g')
+            {
+                printf("\nYou collected glass!");
+                delay(2);
+                a[y][x-1]='X';
+                brgl++;
+            }
+             if(a[y][x-1]=='X'&&brgl>=1)
+            {
+                printf("\nYou have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+             if(a[y][x-1]==' ')
+             {
+              a[y][x-1]='O';
+              a[y][x]=' ';
+             }
+        }
+
+        if (posoka == searchRight)
+        {
+            if (a[y][x+1]=='g')
+            {
+                printf("\nYou collected glass!");
+                delay(2);
+                a[y][x+1]='X';
+                brgl++;
+            }
+             if(a[y][x+1]=='X' && brgl>=1)
+            {
+                printf("\nYou have already taken this trash! \nYou can't step on it.");
+                a[y][x]='O';
+            }
+             if(a[y][x+1]==' ')
+            {
+               a[y][x+1]='O';
+               a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchUp ) {
+            if (a[y-1][x]=='g')
+            {
+                printf("\nYou collected glass!");
+                delay(2);
+                a[y-1][x]='X';
+                brgl++;
+            }
+            if(a[y-1][x]=='X'&&brgl>=1)
+            {
+                printf("\nYou have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+            if(a[y-1][x]==' ')
+            {
+                a[y-1][x]='O';
+                a[y][x]=' ';
+            }
+        }
+
+        if (posoka == searchDown )
+        {
+            if (a[y+1][x]=='g'){
+                printf("\nYou collected glass!");
+                delay(2);
+                a[y+1][x]='X';
+                brgl++;
+            }
+            if(a[y+1][x]=='X' && brgl>=1)
+            {
+                printf("\nYou have already taken this trash! You can't step on it.");
+                a[y][x]='O';
+            }
+            if(a[y+1][x]==' ')
+            {
+                a[y+1][x]='O';
+                a[y][x]=' ';
+            }
+        }
+        return brgl;
+}
+
+ void HasTrash(int y, int x, char a[50][200],int brpap,int brpl,int brgl)
+{
+    if ((a[47][98]=='O' || a[48][97]=='O' || a[48][99]=='O') && brpap!=0)
+    {
         printf("\nYou threw some paper!");
         delay(2);
         a[48][98]='H';
         a[y][x]='O';
-        br=0;
     }
 
-    if ((a[47][98]=='O' || a[48][96]=='O' || a[48][99]=='O') && br==0){
+    if ((a[47][98]=='O' || a[48][97]=='O' || a[48][99]=='O') && brpap==0)
+        {
              printf("\nYou don't have any trash with you! \nYou can't throw yourself - you are not from paper?!");
              delay(2);
-            }
+        }
 
 
-    if ((a[47][100]=='O' || a[48][99]=='O' || a[48][101]=='O') && br!=0){ //plastmasa
+    if ((a[47][100]=='O' || a[48][99]=='O' || a[48][101]=='O') && brpl!=0){ //plastmasa
         printf("\nYou threw some plastic materials!");
         delay(2);
         a[48][100]='P';
         a[y][x]='O';
-        br=0;
     }
 
-    if ((a[47][100]=='O' || a[48][99]=='O' || a[48][101]=='O') && br==0){
+    if ((a[47][100]=='O' || a[48][99]=='O' || a[48][101]=='O') && brpl==0){
             printf("\nYou don't have any trash with you! \nGo collect some, before I see you again here empty handed!");
             delay(2);
         }
 
-    if ((a[47][102]=='O' || a[48][101]=='O' || a[48][103]=='O') && br!=0){ //styklo
-        printf("\nYou threw some glass!");
+    if ((a[47][102]=='O' || a[48][101]=='O' || a[48][103]=='O') && brgl!=0){
+        printf("\nYou threw some glass away!");
         delay(2);
-        a[48][102]='S';
+        a[48][102]='G';
         a[y][x]='O';
-        br=0;
     }
 
-    if ((a[47][102]=='O' || a[48][101]=='O' || a[48][103]=='O') && br==0){
+    if ((a[47][102]=='O' || a[48][101]=='O' || a[48][103]=='O') && brgl==0){
             printf("\nYou don't have any trash with you! \nYou are not from glass so don't throw yourself?!");
             delay(2);
         }
-
-
 }
 
-void CollectedTrash()
+void CollectedPap()
 {
-    printf("\nYou collected all the trash! \nNow you have to put all of it in the recycle bin.");
+    printf("\nYou collected all the paper! \nNow you have to put it in the recycle bin for paper.");
+}
+
+void CollectedPl()
+{
+    printf("\nYou collected all the plastic! \nNow you have to put it in the recycle bin for plastic.");
+}
+
+void CollectedGl()
+{
+    printf("\nYou collected all the glass! \nNow you have to put it in the recycle bin for glass.");
 }
 
 int RecycleBin(int x, int y, char a[50][200])
 {
-    int Kbr=0,k=0;
+    int Kbr,k=0;
     char posoka;
     char searchLeft = 'a';
     char searchRight = 'd';
@@ -314,7 +632,7 @@ int RecycleBin(int x, int y, char a[50][200])
     char searchUpD = '3';
     char searchDownD = '4';
 
-
+    delay(2);
     if (Kbr!=1) printf("\nPosoka (1=10 v lqvo; 2=10 v dqsno; 3=10 nagore; 4=10 nadolu)\n a=1 v lqvo; d=1 v dqsno; w=1 nagore; s=1 nadolu: ");
     posoka=getchar();
     y=SearchOY(a);
@@ -322,15 +640,16 @@ int RecycleBin(int x, int y, char a[50][200])
 
 
         if (posoka == searchLeftD){
-            if (a[y][x-10]=='X' || a[y][x-10]=='W'||a[y][x-10]=='S'||a[y][x-10]=='H'||a[y][x-10]=='P') a[y][x-1]='O';
+            if (a[y][x-10]=='X'||a[y][x-10]=='g'||a[y][x-10]=='p'||a[y][x-10]=='h'||a[y][x-10]=='G'||a[y][x-10]=='H'||a[y][x-10]=='P') a[y][x-1]='O';
             else {
             a[y][x-10]='O';
             a[y][x]=' ';
             }
         }
 
-        if (posoka == searchRightD){
-            if (a[y][x+10]=='X' || a[y][x+10]=='W' || a[y][x+10]=='H'||a[y][x-10]=='S'||a[y][x-10]=='P') a[y][x+1]='O';
+        if (posoka == searchRightD)
+        {
+            if (a[y][x+10]=='X' || a[y][x+10]=='g'|| a[y][x+10]=='p'|| a[y][x+10]=='h' || a[y][x+10]=='H'||a[y][x-10]=='G'||a[y][x-10]=='P') a[y][x+1]='O';
             else {
             a[y][x+10]='O';
             a[y][x]=' ';
@@ -338,7 +657,7 @@ int RecycleBin(int x, int y, char a[50][200])
         }
 
         if (posoka == searchDownD){
-            if(a[y+10][x]=='X' || a[y+10][x]=='W' || a[y+10][x]=='H' || a[y+10][x]=='P' || a[y+10][x]=='S') a[y+1][x]='O';
+            if(a[y+10][x]=='X' || a[y+10][x]=='g'|| a[y+10][x]=='p'|| a[y+10][x]=='h' || a[y+10][x]=='H' || a[y+10][x]=='P' || a[y+10][x]=='G') a[y+1][x]='O';
             else {
             a[y+10][x]='O';
             a[y][x]=' ';
@@ -347,8 +666,7 @@ int RecycleBin(int x, int y, char a[50][200])
 
         if (posoka == searchLeft)
         {
-
-             if(a[y][x-1]=='S')
+             if(a[y][x-1]=='G')
              {
                  printf("\nCongratulations! You have just thrown your trash in the recycle bin!");
                  Kbr=1;
@@ -365,7 +683,6 @@ int RecycleBin(int x, int y, char a[50][200])
 
         if (posoka == searchRight)
         {
-
              if(a[y][x+1]=='H')
              {
                 printf("Congratulations! You have just thrown your trash in the recycle bin!");
@@ -383,9 +700,7 @@ int RecycleBin(int x, int y, char a[50][200])
 
         if (posoka == searchDown )
         {
-
-
-            if(a[y+1][x]=='H'||a[y+1][x]=='P'||a[y+1][x]=='S')
+            if(a[y+1][x]=='H'||a[y+1][x]=='P'||a[y+1][x]=='G')
             {
                 printf("Congratulations! You have just thrown your trash in the recycle bin!");
                 Kbr=1;
@@ -399,8 +714,6 @@ int RecycleBin(int x, int y, char a[50][200])
                 a[y][x]=' ';
             }
         }
-
-
 }
 
 SearchOY(char a[50][200])
@@ -434,150 +747,6 @@ SearchOX(char a[50][200])
         }
     }
 }
-
-int TreeMove(int y, int x, char a[50][200],int br)
-{
-    int k=0;
-
-    char posoka;
-    char searchLeft = 'a';
-    char searchRight = 'd';
-    char searchUp = 'w';
-    char searchDown = 's';
-
-    char searchLeftD = '1';
-    char searchRightD = '2';
-    char searchUpD = '3';
-    char searchDownD = '4';
-
-    printf("\nPosoka (1=10 v lqvo; 2=10 v dqsno; 3=10 nagore; 4=10 nadolu)\n a=1 v lqvo; d=1 v dqsno; w=1 nagore; s=1 nadolu: ");
-
-    posoka=getchar();
-    y=SearchOY(a);
-    x=SearchOX(a);
-
-        if (posoka == searchLeftD){
-            if (a[y][x-10]=='X') a[y][x-1]='O';
-            else {
-            a[y][x-10]='O';
-            a[y][x]=' ';
-            }
-        }
-
-        if (posoka == searchRightD){
-            if (a[y][x+10]=='X') a[y][x+1]='O';
-            else {
-            a[y][x+10]='O';
-            a[y][x]=' ';
-            }
-        }
-
-        if (posoka == searchUpD){
-            if(a[y-10][x]=='X') a[y-1][x]='O';
-            else {
-            a[y-10][x]='O';
-            a[y][x]=' ';
-            }
-        }
-
-        if (posoka == searchDownD){
-            if(a[y+10][x]=='X') a[y+1][x]='O';
-            else {
-            a[y+10][x]='O';
-            a[y][x]=' ';
-            }
-        }
-
-        if (posoka == searchLeft)
-        {
-             if (a[y][x-1]=='X')
-            {
-                printf("\nYou planted a tree!");
-                delay(2);
-                a[y][x-1]='T';
-                br++;
-            }
-             if(a[y][x-1]=='T'&&br>=1)
-            {
-                printf("\nYou have already planted a tree here! You can't plant another one here.");
-                delay(2);
-                a[y][x]='O';
-            }
-             if(a[y][x-1]==' ')
-             {
-              a[y][x-1]='O';
-              a[y][x]=' ';
-             }
-        }
-
-        if (posoka == searchRight)
-        {
-            if (a[y][x+1]=='X')
-            {
-                printf("\nYou planted a tree!");
-                delay(2);
-                a[y][x+1]='T';
-                br++;
-            }
-             if(a[y][x+1]=='T' && br>=1)
-            {
-                printf("\nYou have already planted a tree here! You can't plant another one here.");
-                delay(2);
-                a[y][x]='O';
-            }
-             if(a[y][x+1]==' ')
-            {
-               a[y][x+1]='O';
-               a[y][x]=' ';
-            }
-        }
-
-        if (posoka == searchUp ) {
-            if (a[y-1][x]=='X')
-            {
-                printf("\nYou have planted a tree");
-                delay(2);
-                a[y-1][x]='T';
-                br++;
-            }
-            if(a[y-1][x]=='T' &&br>=1)
-            {
-                printf("\nYou have already planted a tree here! You can't plant another one here.");
-                delay(2);
-                a[y][x]='O';
-            }
-            if(a[y-1][x]==' ')
-            {
-                a[y-1][x]='O';
-                a[y][x]=' ';
-            }
-        }
-
-        if (posoka == searchDown )
-        {
-            if (a[y+1][x]=='X'){
-                printf("\nYou have planted a tree!");
-                delay(2);
-                a[y+1][x]='T';
-                br++;
-            }
-            if(a[y+1][x]=='T' && br>=1)
-            {
-                printf("\nYou have already planted a tree here! You can't plant another one here.");
-                delay(2);
-                a[y][x]='O';
-            }
-            if(a[y+1][x]==' ')
-            {
-                a[y+1][x]='O';
-                a[y][x]=' ';
-            }
-        }
-
-        return br;
-}
-
-
 
 void delay(int number_of_seconds)
 {
