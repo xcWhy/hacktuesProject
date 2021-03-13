@@ -10,7 +10,7 @@ int main()
     srand(time(NULL));
     char a[50][200];
     //int bokluk[50][200];
-    int x,y,br=0,brbokluk,Kbr=0;
+    int x,y,br=0,brbokluk,Kbr=0,brhar,brplast,brglass;
     char recpa='H';
     char recpl='P';
     char recgl='S';
@@ -33,14 +33,37 @@ int main()
     a[48][98]='H';
     a[48][100]='P';
     a[48][102]='S';
-    do{
-    printf("\nHow much trash do you want to collect today?: ");
-    scanf("%d",&brbokluk);
-    }while(brbokluk<1 || brbokluk>9000);
     
-    for (int n=0; n<brbokluk; n++)
+    do{
+    printf("\nHow much paper do you want to collect from the field: ");
+    scanf("%d",&brhar);
+    }while(brhar<1 || brhar>3000);
+    
+    do{
+    printf("\nHow much plastic materials do you want to collect from the field?: ");
+    scanf("%d",&brplast);
+    }while(brplast<1 || brplast>3000);
+    
+    do{
+    printf("\nHow much glass do you want to collect from the field?: ");
+    scanf("%d",&brglass);
+    }while(brglass<1 || brglass>3000);
+    
+    for (int n=0; n<brhar; n++)
     {
-      RandFunction(x,y,a);
+      RandFunctionHar(x,y,a);
+      PrintArr(a);
+    }
+    
+    for (int n=0; n<brplast; n++)
+    {
+      RandFunctionPlast(x,y,a);
+      PrintArr(a);
+    }
+    
+    for (int n=0; n<brglass; n++)
+    {
+      RandFunctionGlass(x,y,a);
       PrintArr(a);
     }
 
@@ -80,16 +103,35 @@ int PrintArr(char a[50][200])
     }
 }
 
-int RandFunction(int x, int y, char a[50][200])
+int RandFunctionHar(int x, int y, char a[50][200])
 {
     srand(time(NULL));
     do{
     x=rand()%197 + 1;
     y=rand()%47 + 1;
-    }while(a[y][x]=='W' || a[25][100]!=' ');
-    a[y][x]='W';
+    }while(a[y][x]=='H' || a[25][100]!=' ');
+    a[y][x]='H';
 }
 
+int RandFunctionPlast
+{
+    srand(time(NULL));
+    do{
+    x=rand()%197 + 1;
+    y=rand()%47 + 1;
+    }while(a[y][x]=='P' || a[25][100]!=' ');
+    a[y][x]='P';
+}
+
+int RandFunctionGlass
+{
+    srand(time(NULL));
+    do{
+    x=rand()%197 + 1;
+    y=rand()%47 + 1;
+    }while(a[y][x]=='G' || a[25][100]!=' ');
+    a[y][x]='G';
+}
 int Choveche(int y, int x, char a[50][200])
 {
     char moves;
@@ -119,7 +161,7 @@ int Move(int x, int y, char a[50][200])
     x=SearchOX(a);
 
         if (posoka == searchLeftD){
-            if (a[y][x-10]=='X' || a[y][x-10]=='W') a[y][x-1]='O';
+            if (a[y][x-10]=='X' || a[y][x-10]=='H' || a[y][x-10]=='P' || a[y][x-10]=='G') a[y][x-1]='O';
             else {
             a[y][x-10]='O';
             a[y][x]=' ';
@@ -127,7 +169,7 @@ int Move(int x, int y, char a[50][200])
         }
 
         if (posoka == searchRightD){
-            if (a[y][x+10]=='X' || a[y][x+10]=='W') a[y][x+1]='O';
+            if (a[y][x+10]=='X' || a[y][x+10]=='H' || a[y][x+10]=='P' || a[y][x+10]=='G') a[y][x+1]='O';
             else {
             a[y][x+10]='O';
             a[y][x]=' ';
@@ -135,7 +177,7 @@ int Move(int x, int y, char a[50][200])
         }
 
         if (posoka == searchUpD){
-            if(a[y-10][x]=='X' || a[y-10][x]=='W') a[y-1][x]='O';
+            if(a[y-10][x]=='X' || a[y-10][x]=='H' || a[y-10][x]=='P' || a[y-10][x]=='G') a[y-1][x]='O';
             else {
             a[y-10][x]='O';
             a[y][x]=' ';
@@ -143,7 +185,7 @@ int Move(int x, int y, char a[50][200])
         }
 
         if (posoka == searchDownD){
-            if(a[y+10][x]=='X' || a[y+10][x]=='W') a[y+1][x]='O';
+            if(a[y+10][x]=='X' || a[y+10][x]=='H' || a[y+10][x]=='P' || a[y+10][x]=='G') a[y+1][x]='O';
             else {
             a[y+10][x]='O';
             a[y][x]=' ';
